@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'apache-maven-3.0.1'
+        maven 'apache-maven-3.8.5'
     }
     timeout(unit: 'MINUTES', time: 10)
     stages {

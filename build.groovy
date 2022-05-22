@@ -1,9 +1,11 @@
 pipeline {
     agent any
     tools {
-        maven 'apache-maven-3.8.5'
+        maven 'mvn'
     }
-    timeout(unit: 'MINUTES', time: 10)
+    options {
+        timeout(unit: 'MINUTES', time: 10)
+    }
     stages {
         stage('Start') {
             failFast true

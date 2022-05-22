@@ -35,7 +35,7 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                iьSendMessage(MESSAGE: "Hello, World!", CHAT_ID: "v.korobov@corp.mail.ru")
+                imSendMessage(MESSAGE: "Hello, World!", CHAT_ID: "v.korobov@corp.mail.ru")
             }
         }
     }

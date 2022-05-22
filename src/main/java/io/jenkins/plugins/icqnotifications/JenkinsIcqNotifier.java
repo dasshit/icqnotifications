@@ -8,18 +8,14 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
+import io.jenkins.plugins.icqnotifications.net.CustomHttpClientBuilder;
 import io.jenkins.plugins.icqnotifications.utils.IcqBaseButton;
 import io.jenkins.plugins.icqnotifications.utils.IcqKeyBoard;
 import io.jenkins.plugins.icqnotifications.utils.IcqUrlButton;
-import org.apache.commons.lang.ArrayUtils;
-import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.DataBoundSetter;
@@ -59,25 +55,7 @@ public class JenkinsIcqNotifier extends Notifier {
             final Launcher launcher, final BuildListener listener) throws IOException{
         // logic to be executed by plugin
 
-        try (CloseableHttpClient httpClient = HttpClients.custom()
-                .addInterceptorLast(
-                        (HttpResponseInterceptor) (response, context) -> {
-
-                            final int responseStatusCode = response.getStatusLine().getStatusCode();
-
-                            int[] errorStatusCodeList = {400, 401, 403, 404, 500, 504};
-
-                            if (ArrayUtils.contains(errorStatusCodeList, responseStatusCode)) {
-
-                                listener.getLogger().println("Retrying request, current status code: " + responseStatusCode);
-
-                                throw new IOException("Retrying request, current status code: " + responseStatusCode);
-                            }
-
-                        })
-                .setRetryHandler(
-                        (exception, executionCount, context) -> executionCount < 5)
-                .build()) {
+        try (CloseableHttpClient httpClient = new CustomHttpClientBuilder().build()) {
 
             String msgUrl = JenkinsIcqNotificationsConfiguration.get().getBotApiUrl() + "/messages/sendText";
 

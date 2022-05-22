@@ -11,22 +11,16 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import io.jenkins.plugins.icqnotifications.net.CustomHttpClientBuilder;
 import io.jenkins.plugins.icqnotifications.utils.IcqBaseButton;
 import io.jenkins.plugins.icqnotifications.utils.IcqKeyBoard;
 import io.jenkins.plugins.icqnotifications.utils.IcqUrlButton;
 import jenkins.tasks.SimpleBuildStep;
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpResponseInterceptor;
-import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.jenkinsci.Symbol;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -65,25 +59,7 @@ public class JenkinsIcqBuilder extends Builder implements SimpleBuildStep {
     @Override
     public void perform(@NonNull Run<?, ?> run, @NonNull FilePath workspace, @NonNull EnvVars env, @NonNull Launcher launcher, TaskListener listener) throws InterruptedException, IOException {
 
-        try (CloseableHttpClient httpClient = HttpClients.custom()
-                .addInterceptorLast(
-                        (HttpResponseInterceptor) (response, context) -> {
-
-                    final int responseStatusCode = response.getStatusLine().getStatusCode();
-
-                    int[] errorStatusCodeList = {400, 401, 403, 404, 500, 504};
-
-                    if (ArrayUtils.contains(errorStatusCodeList, responseStatusCode)) {
-
-                        listener.getLogger().println("Retrying request, current status code: " + responseStatusCode);
-
-                        throw new IOException("Retrying request, current status code: " + responseStatusCode);
-                    }
-
-                })
-                .setRetryHandler(
-                        (exception, executionCount, context) -> executionCount < 5)
-                .build()) {
+        try (CloseableHttpClient httpClient = new CustomHttpClientBuilder().build()) {
 
             String msgUrl = JenkinsIcqNotificationsConfiguration.get().getBotApiUrl() + "/messages/sendText";
 
@@ -104,14 +80,16 @@ public class JenkinsIcqBuilder extends Builder implements SimpleBuildStep {
                             .setUrl(env.get("JOB_URL"))
             );
 
+            String finalMessageText = MESSAGE;
+
             for (Map.Entry<String, String> entry : env.entrySet()) {
 
                 String entryKeyName = "$" + entry.getKey();
 
-                if (MESSAGE.contains(entryKeyName)){
+                if (finalMessageText.contains(entryKeyName)){
 
-                    for (int i = 0; i < StringUtils.countMatches(MESSAGE, entryKeyName); i++){
-                        MESSAGE = MESSAGE.replace(entryKeyName, entry.getValue());
+                    for (int i = 0; i < StringUtils.countMatches(finalMessageText, entryKeyName); i++){
+                        finalMessageText = finalMessageText.replace(entryKeyName, entry.getValue());
                     }
                 }
             }
@@ -121,7 +99,7 @@ public class JenkinsIcqBuilder extends Builder implements SimpleBuildStep {
             URI uri = new URIBuilder(request.getURI())
                     .addParameter("token", JenkinsIcqNotificationsConfiguration.get().getBotToken())
                     .addParameter("chatId", CHAT_ID)
-                    .addParameter("text", MESSAGE)
+                    .addParameter("text", finalMessageText)
                     .addParameter("parseMode", JenkinsIcqNotificationsConfiguration.get().getParseMode())
                     .addParameter("inlineKeyboardMarkup", keyboard.toString())
                     .build();

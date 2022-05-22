@@ -35,12 +35,14 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                icqSendMessage(MESSAGE: "Hello, World!", CHAT_ID: "v.korobov@corp.mail.ru")
+                iьSendMessage(MESSAGE: "Hello, World!", CHAT_ID: "v.korobov@corp.mail.ru")
             }
         }
     }
 }
-```## LICENSE
+```
+
+## LICENSE
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
 

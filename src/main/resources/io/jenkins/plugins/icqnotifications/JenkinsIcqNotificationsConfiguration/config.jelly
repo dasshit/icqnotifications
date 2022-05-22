@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+    <f:section title="${%ICQ/VK Teams Notifications}">
+        <f:entry field="botToken" title="${%BotToken}">
+            <f:textbox/>
+        </f:entry>
+        <f:entry field="botApiUrl" title="${%BotApiUrl}">
+            <f:textbox/>
+        </f:entry>
+        <f:entry field="parseMode" title="${%ParseMode}">
+            <f:textbox/>
+        </f:entry>
+    </f:section>
+</j:jelly>

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
 public class JenkinsIcqNotifier extends Notifier {
@@ -71,12 +72,14 @@ public class JenkinsIcqNotifier extends Notifier {
                             .setUrl(build.getUrl())
             );
 
+            final String finalMessageText = MESSAGE + "\n\nResult: " + Objects.requireNonNull(build.getResult());
+
             keyboard.addButtonsRow(buttonsRow);
 
             URI uri = new URIBuilder(request.getURI())
                     .addParameter("token", JenkinsIcqNotificationsConfiguration.get().getBotToken())
                     .addParameter("chatId", CHAT_ID)
-                    .addParameter("text", MESSAGE)
+                    .addParameter("text", finalMessageText)
                     .addParameter("parseMode", JenkinsIcqNotificationsConfiguration.get().getParseMode())
                     .addParameter("inlineKeyboardMarkup", keyboard.toString())
                     .build();

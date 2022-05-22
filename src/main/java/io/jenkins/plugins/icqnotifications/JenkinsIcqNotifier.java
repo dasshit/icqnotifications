@@ -64,6 +64,9 @@ public class JenkinsIcqNotifier extends Notifier {
                             int[] errorStatusCodeList = {400, 401, 403, 404, 500, 504};
 
                             if (ArrayUtils.contains(errorStatusCodeList, responseStatusCode)) {
+
+                                listener.getLogger().println("Retrying request, current status code: " + responseStatusCode);
+
                                 throw new IOException("Retrying request, current status code: " + responseStatusCode);
                             }
 

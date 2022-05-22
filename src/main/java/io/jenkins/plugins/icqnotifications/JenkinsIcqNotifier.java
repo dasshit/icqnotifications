@@ -8,6 +8,9 @@ import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Notifier;
 import hudson.tasks.Publisher;
 import hudson.util.FormValidation;
+import io.jenkins.plugins.icqnotifications.utils.IcqBaseButton;
+import io.jenkins.plugins.icqnotifications.utils.IcqKeyBoard;
+import io.jenkins.plugins.icqnotifications.utils.IcqUrlButton;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -26,6 +29,7 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 
 public class JenkinsIcqNotifier extends Notifier {
@@ -79,11 +83,24 @@ public class JenkinsIcqNotifier extends Notifier {
 
             HttpGet request = new HttpGet(msgUrl);
 
+            IcqKeyBoard keyboard = new IcqKeyBoard();
+
+            ArrayList<IcqBaseButton> buttonsRow = new ArrayList<IcqBaseButton>();
+
+            buttonsRow.add(
+                    new IcqUrlButton()
+                            .setText("Build URL")
+                            .setUrl(build.getUrl())
+            );
+
+            keyboard.addButtonsRow(buttonsRow);
+
             URI uri = new URIBuilder(request.getURI())
                     .addParameter("token", JenkinsIcqNotificationsConfiguration.get().getBotToken())
                     .addParameter("chatId", CHAT_ID)
                     .addParameter("text", MESSAGE)
                     .addParameter("parseMode", JenkinsIcqNotificationsConfiguration.get().getParseMode())
+                    .addParameter("inlineKeyboardMarkup", keyboard.toString())
                     .build();
 
             request.setURI(uri);

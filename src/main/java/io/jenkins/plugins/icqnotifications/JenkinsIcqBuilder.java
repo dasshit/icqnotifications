@@ -11,8 +11,12 @@ import hudson.model.TaskListener;
 import hudson.tasks.BuildStepDescriptor;
 import hudson.tasks.Builder;
 import hudson.util.FormValidation;
+import io.jenkins.plugins.icqnotifications.utils.IcqBaseButton;
+import io.jenkins.plugins.icqnotifications.utils.IcqKeyBoard;
+import io.jenkins.plugins.icqnotifications.utils.IcqUrlButton;
 import jenkins.tasks.SimpleBuildStep;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpResponseInterceptor;
@@ -33,6 +37,8 @@ import javax.servlet.ServletException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Map;
 
 
 public class JenkinsIcqBuilder extends Builder implements SimpleBuildStep {
@@ -83,11 +89,41 @@ public class JenkinsIcqBuilder extends Builder implements SimpleBuildStep {
 
             HttpGet request = new HttpGet(msgUrl);
 
+            IcqKeyBoard keyboard = new IcqKeyBoard();
+
+            ArrayList<IcqBaseButton> buttonsRow = new ArrayList<IcqBaseButton>();
+
+            buttonsRow.add(
+                    new IcqUrlButton()
+                            .setText("Build URL")
+                            .setUrl(env.get("BUILD_URL"))
+            );
+            buttonsRow.add(
+                    new IcqUrlButton()
+                            .setText("Job URL")
+                            .setUrl(env.get("JOB_URL"))
+            );
+
+            for (Map.Entry<String, String> entry : env.entrySet()) {
+
+                String entryKeyName = "$" + entry.getKey();
+
+                if (MESSAGE.contains(entryKeyName)){
+
+                    for (int i = 0; i < StringUtils.countMatches(MESSAGE, entryKeyName); i++){
+                        MESSAGE = MESSAGE.replace(entryKeyName, entry.getValue());
+                    }
+                }
+            }
+
+            keyboard.addButtonsRow(buttonsRow);
+
             URI uri = new URIBuilder(request.getURI())
                     .addParameter("token", JenkinsIcqNotificationsConfiguration.get().getBotToken())
                     .addParameter("chatId", CHAT_ID)
                     .addParameter("text", MESSAGE)
                     .addParameter("parseMode", JenkinsIcqNotificationsConfiguration.get().getParseMode())
+                    .addParameter("inlineKeyboardMarkup", keyboard.toString())
                     .build();
 
             request.setURI(uri);

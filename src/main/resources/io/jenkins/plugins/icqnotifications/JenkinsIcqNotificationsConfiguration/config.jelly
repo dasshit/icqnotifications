@@ -2,14 +2,33 @@
 <?jelly escape-by-default='true'?>
 <j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
     <f:section title="${%ICQ/VK Teams Notifications}">
+        <f:description>
+            <div>
+                <strong>API Description available at</strong>:<br/>
+                <a href="https://icq.com/botapi/">ICQ Bot API</a><br/>
+                <a href="https://agent.mail.ru/botapi/">Agent Bot API</a><br/>
+                <a href="https://myteam.mail.ru/botapi/">VK Teams Bot API</a><br/>
+                <br/>
+                Instruction:<br/>
+                1. Create bot from <a href="https://u.internal.myteam.mail.ru/profile/metabot"><strong>@metabot</strong></a><br/>
+                2. Insert Bot Token and API URL down here<br/>
+                3. Test connection
+            </div>
+        </f:description>
         <f:entry field="botToken" title="${%BotToken}">
-            <f:textbox/>
+            <f:password/>
         </f:entry>
         <f:entry field="botApiUrl" title="${%BotApiUrl}">
             <f:textbox/>
         </f:entry>
-        <f:entry field="parseMode" title="${%ParseMode}">
-            <f:textbox/>
+        <f:entry title="${%ParseMode}" field="parseMode">
+            <select name="parseMode">
+                <option value="HTML">HTML</option>
+                <option value="Markdown">Markdown</option>
+            </select>
         </f:entry>
+        <f:validateButton
+                title="${%Test Connection}" progress="${%Testing...}"
+                method="testConnection" with="botToken,botApiUrl" />
     </f:section>
 </j:jelly>

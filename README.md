@@ -1,28 +1,45 @@
-# example
+# ICQ/VK Teams Notifications plugin
+
+<img src="https://icq.com/botapi/res/logo_icq_new.png" width="40%"><img src="https://myteam.mail.ru/botapi/res/logo_myteam.png" width="40%">
 
 ## Introduction
 
-TODO Describe what your plugin does here
+Plugin for text notifications from Jenkins CI to ICQ/Agent/VK Teams with Bot API
 
 ## Getting started
 
-TODO Tell users how to configure your plugin here, include screenshots, pipeline examples and 
-configuration-as-code examples.
+### 1. Create bot with @Metabot
 
-## Issues
+### 2. Build plugin
 
-TODO Decide where you're going to host your issues, the default is Jenkins JIRA, but you can also enable GitHub issues,
-If you use GitHub issues there's no need for this section; else add the following line:
+```bash
+mvn verify
+```
 
-Report issues and enhancements in the [Jenkins issue tracker](https://issues.jenkins-ci.org/).
+### 3. Install plugin in Jenkins settings
 
-## Contributing
+### 4. Configure global plugin settings
 
-TODO review the default [CONTRIBUTING](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md) file and make sure it is appropriate for your plugin, if not then add your own one adapted from the base file
+## Usage
 
-Refer to our [contribution guidelines](https://github.com/jenkinsci/.github/blob/master/CONTRIBUTING.md)
+### Can be set as Build Step
 
-## LICENSE
+<img src="images/test.png" />
+
+## Or used in Groovy pipelines
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Hello') {
+            steps {
+                icqSendMessage(MESSAGE: "Hello, World!", CHAT_ID: "v.korobov@corp.mail.ru")
+            }
+        }
+    }
+}
+```## LICENSE
 
 Licensed under MIT, see [LICENSE](LICENSE.md)
 

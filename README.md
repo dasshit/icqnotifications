@@ -28,8 +28,8 @@ mvn package
 
 <img src="images/test.png" />
 
-## Or used in Groovy pipelines
-```groovy
+## Or used in pipelines
+```
 pipeline {
     agent any
 
@@ -43,6 +43,18 @@ pipeline {
     post {
         always {
             imSendMessage(MESSAGE: "Post Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "ApLWcbXOhA-EZYAN")
+        }
+    }
+}
+```
+## And Groovy pipelines
+```groovy
+node {
+    stage('Example') {
+        try {
+            imSendMessage(MESSAGE: "Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "ApLWcbXOhA-EZYAN")
+        } catch (e) {
+            println e
         }
     }
 }

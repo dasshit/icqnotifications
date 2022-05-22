@@ -1,5 +1,5 @@
 
-MESSAGE: String = "" as Class<String>;
+def MESSAGE = "";
 
 pipeline {
     agent any

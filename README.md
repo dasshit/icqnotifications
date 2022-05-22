@@ -1,4 +1,4 @@
-# ICQ/VK Teams Notifications plugin
+# ICQ/VK Teams Notifications plugin for Jenkins CI
 
 <img src="https://icq.com/botapi/res/logo_icq_new.png" width="40%"><img src="https://myteam.mail.ru/botapi/res/logo_myteam.png" width="40%">
 

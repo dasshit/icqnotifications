@@ -4,7 +4,8 @@
 
 ## Introduction
 
-Plugin for text notifications from Jenkins CI to ICQ/Agent/VK Teams with Bot API
+Plugin for text notifications from Jenkins CI to ICQ/Agent/VK Teams with Bot API.
+Supports env vars replacing in provided message text.
 
 ## Getting started
 

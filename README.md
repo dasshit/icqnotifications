@@ -13,6 +13,7 @@ Plugin for text notifications from Jenkins CI to ICQ/Agent/VK Teams with Bot API
 ### 2. Build plugin
 
 ```bash
+git clone https://github.com/dasshit/icqnotifications.git
 mvn verify
 ```
 

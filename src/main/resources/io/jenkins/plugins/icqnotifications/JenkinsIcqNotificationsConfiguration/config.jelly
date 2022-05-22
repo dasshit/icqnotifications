@@ -4,6 +4,8 @@
     <f:section title="${%ICQ/VK Teams Notifications}">
         <f:description>
             <div>
+                <img src="https://icq.com/botapi/res/logo_icq_new.png" width="40%" />
+                <img src="https://myteam.mail.ru/botapi/res/logo_myteam.png" width="40%" /><br/>
                 <strong>API Description available at</strong>:<br/>
                 <a href="https://icq.com/botapi/">ICQ Bot API</a><br/>
                 <a href="https://agent.mail.ru/botapi/">Agent Bot API</a><br/>

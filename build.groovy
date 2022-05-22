@@ -1,3 +1,6 @@
+
+MESSAGE: String = "" as Class<String>;
+
 pipeline {
     agent any
     tools {
@@ -12,11 +15,16 @@ pipeline {
             parallel {
                 stage("Start notification to VK Teams") {
                     steps {
-                        def MESSAGE = """Started build $BUILD_DISPLAY_NAME for project: <a href="$GIT_URL">\"$JOB_BASE_NAME\"</a>
+
+                        script {
+
+                        MESSAGE = """Started build $BUILD_DISPLAY_NAME for project: <a href="$GIT_URL">\"$JOB_BASE_NAME\"</a>
 
 Branch: $GIT_BRANCH
 Last commit:
 $GIT_COMMIT - @[$GIT_COMMITTER_EMAIL]"""
+
+                        }
 
                         imSendMessage(MESSAGE: MESSAGE, CHAT_ID: "v.korobov@corp.mail.ru")
 

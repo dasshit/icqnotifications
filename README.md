@@ -14,7 +14,7 @@ Plugin for text notifications from Jenkins CI to ICQ/Agent/VK Teams with Bot API
 
 ```bash
 git clone https://github.com/dasshit/icqnotifications.git
-mvn verify
+mvn package
 ```
 
 ### 3. Install plugin in Jenkins settings
@@ -35,13 +35,13 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                imSendMessage(MESSAGE: "Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "v.korobov@corp.mail.ru")
+                imSendMessage(MESSAGE: "Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "ApLWcbXOhA-EZYAN")
             }
         }
     }
     post {
         always {
-            imSendMessage(MESSAGE: "Post Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "v.korobov@corp.mail.ru")
+            imSendMessage(MESSAGE: "Post Build Step!\n\nWORKSPACE: $WORKSPACE", CHAT_ID: "ApLWcbXOhA-EZYAN")
         }
     }
 }

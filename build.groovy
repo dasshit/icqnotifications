@@ -26,7 +26,7 @@ $GIT_COMMIT - @[$GIT_COMMITTER_EMAIL]"""
 
                         }
 
-                        imSendMessage(MESSAGE: MESSAGE, CHAT_ID: "v.korobov@corp.mail.ru")
+                        imSendMessage(MESSAGE: MESSAGE, CHAT_ID: "ApLWcbXOhA-EZYAN")
 
                     }
                 }
@@ -50,7 +50,7 @@ $GIT_COMMIT - @[$GIT_COMMITTER_EMAIL]"""
         always {
             sh "set"
             archiveArtifacts artifacts: "target/*"
-            imSendMessage(MESSAGE: "Build completed", CHAT_ID: "v.korobov@corp.mail.ru")
+            imSendMessage(MESSAGE: "Build completed", CHAT_ID: "ApLWcbXOhA-EZYAN")
         }
     }
 }

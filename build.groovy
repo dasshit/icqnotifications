@@ -1,4 +1,3 @@
-
 def MESSAGE = "";
 
 pipeline {
@@ -22,7 +21,7 @@ pipeline {
 
 Branch: $GIT_BRANCH
 Last commit:
-$GIT_COMMIT - @[$GIT_COMMITTER_EMAIL]"""
+$GIT_COMMIT"""
 
                         }
 
